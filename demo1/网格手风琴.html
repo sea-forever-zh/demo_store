@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>网格手风琴</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#box{
+			width: 958px;
+			height: 680px;
+			margin: 100px auto;
+			overflow: hidden;
+			position: relative;
+		}
+		ul{
+			width: 1260px;
+			height: 168.5px;;
+			clear: both;
+			position: absolute;
+		}
+		li{
+			list-style: none;
+			float: left;
+			width: 190px;
+			height: 168.5px;
+			border-right: 2px solid #fff;
+			border-bottom: 2px solid #fff;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script>
+		// 大盒子
+		var $box = $("#box");
+		// 创建内容
+		for(var i = 0 ; i < 4 ; i++){
+			// 生成ul
+			$("<ul style='top:"+170.5*i+"px;'></ul>").appendTo($box);;
+			// 生成li并上树
+			for(var j = 0 ; j < 5 ; j++){
+				$("<li style='background:url(images/image" + (j+5*i) + ".jpg) center;' /></li>").appendTo($box.find("ul:eq(" + i + ")"));
+			}
+		}
+		// 每行，所有图片
+		var $ul = $box.find("ul"),
+			$lis = $box.find("ul li");
+		// 行标，列标
+		var hang,
+			lie;
+		var idx;
+		// 变化成的宽高
+		var w = 400,
+			h = 470;
+		var w2 = ($box.width() - w - 8) / 4,
+			h2 = ($box.height() - h - 6) / 3
+		var t;
+		// 移上移出效果
+		$lis.mouseover(function(){
+			hang = $(this).parent().index();
+			lie = $(this).index();
+			// 自己变化
+			$(this).stop(true).animate({"width" : w , "height" : h},800);
+			// this在的行的其他兄弟
+			$(this).siblings().stop(true).animate({"width" : w2 , "height" : h},800);
+			// this在的列的其他元素
+			$ul.eq(hang).siblings().find("li:eq("+lie+")").stop(true).animate({"width" : w , "height" : h2},800);
+			// 其他的li
+			$ul.eq(hang).siblings().find("li:eq("+lie+")").siblings().stop(true).animate({"width" : w2 , "height" : h2},800);
+			// ul的高
+			$ul.eq(hang).siblings().animate({"height" : h2},800);
+			// ul的top值
+			$ul.each(function(index){
+				var bonus = index > hang ? h - h2 : 0;
+				$(this).stop(true).animate({"top" : (h2+2) * index + bonus},800);
+			});
+		}).mouseout(function(){
+			// ul恢复高
+			$ul.stop(true).animate({"height" : 168.5},800);
+			// li恢复宽高
+			$lis.stop(true).animate({"width" : 190 , "height" : 168.5},800);
+			// ul恢复top
+			$ul.each(function(index){
+				$(this).stop(true).animate({"top" : 170.5 * index},800);
+			});
+		});
+	</script>
+</body>
+</html>

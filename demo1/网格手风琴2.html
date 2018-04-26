@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>网格手风琴</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#box{
+			width: 960px;
+			height: 680px;
+			margin: 100px auto;
+			overflow: hidden;
+			position: relative;
+		}
+		p{
+			width: 190.4px;
+			height: 168.5px;
+			position: absolute;
+			background-position: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script>
+		// 触发的P、遍历的P第几行(从零计数)，管top
+		var doHang,blHang;
+		// 触发的P、遍历的P第几列(从零计数)，管left
+		var doLie,blLie;
+		// 第几个(从零计数)
+		var num;
+		// 手风琴参数,
+		var xbonus,ybonus;
+		// 变大的宽高
+		var arr = 
+		[{"width":422,"height":451},
+		{"width":406,"height":451},
+		{"width":389,"height":451},
+		{"width":375,"height":451},
+		{"width":410,"height":451},
+		{"width":422,"height":470},
+		{"width":406,"height":470},
+		{"width":389,"height":470},
+		{"width":375,"height":470},
+		{"width":410,"height":470},
+		{"width":422,"height":480},
+		{"width":406,"height":480},
+		{"width":389,"height":480},
+		{"width":375,"height":480},
+		{"width":410,"height":480},
+		{"width":422,"height":470},
+		{"width":406,"height":470},
+		{"width":389,"height":470},
+		{"width":375,"height":470},
+		{"width":410,"height":470}];
+		// 缩小后的宽高
+		var w,h;
+		// 添加图片
+		for(var i = 0 ; i < 20 ; i++){
+			doHang = parseInt(i/5);
+			lie = i % 5;
+			$("<p style='left: "+lie*192.4+"px; top: "+doHang*170.5+"px; background-image: url(images/image"+i+".jpg);'></p>").appendTo("#box");
+		}
+		// 图片
+		var $ps = $("#box p");
+		// 移上
+		$ps.mouseenter(function(){
+			// 判断被触发的p的行、列、单独序列
+			doHang = parseInt($(this).index() / 5);
+			doLie = $(this).index() % 5;
+			num = $(this).index();
+			$ps.each(function(index){
+				// 遍历的p的行、列
+				blHang = parseInt(index / 5);
+				blLie = index % 5;
+				// 缩小后的宽高
+				w = (960-8-arr[num].width)/4;
+				h = (680-6-arr[num].height)/3;
+				// 行、列的变值
+				xbonus = blLie > doLie ? arr[num].width - w : 0;
+				ybonus = blHang > doHang ? arr[num].height - h : 0;
+				// 与被触发的p在同一行
+				if(doHang == blHang && doLie != blLie){
+					$(this).stop(true).animate({"width" : w, "height" : arr[num].height, "left" : blLie * (w + 2) + xbonus, "top" : blHang * (h + 2) + ybonus} , 800);
+				// 与被触发的p在同一列
+				}else if(doHang != blHang && doLie == blLie){
+					$(this).stop(true).animate({"width" : arr[num].width, "height" : h, "left" : blLie * (w + 2) + xbonus, "top" : blHang * (h + 2) + ybonus} , 800);
+				// 被触发的p
+				}else if(doHang == blHang && doLie == blLie){
+					$(this).stop(true).animate({"width" : arr[num].width, "height" : arr[num].height, "left" : blLie * (w + 2) + xbonus, "top" : blHang * (h + 2) + ybonus} , 800);
+				// 其他p
+				}else{
+					$(this).stop(true).animate({"width" : w, "height" : h, "left" : blLie * (w + 2) + xbonus, "top" : blHang * (h + 2) + ybonus} , 800);
+				}
+			});
+			// 移出
+		}).mouseleave(function(){
+			// 恢复原状
+			$ps.each(function(index){
+				// 判断行列
+				blHang = parseInt(index / 5);
+				blLie = index % 5;
+				// 恢复
+				$(this).stop(true).animate({"width" : 190.4, "height" : 168.5, "left" : blLie*192.4, "top" : blHang*170.5},800);
+			});
+		});
+	</script>
+</body>
+</html>
