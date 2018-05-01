@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>坚果Pro-设计</title>
+	<link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+	<div class="di"></div>
+	<div>
+		<ul>
+		</ul>
+		<a class="left_btn cur" href="javascript:;"></a>
+		<a class="right_btn" href="javascript:;"></a>
+	</div>
+
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script>
+		// 添加包装盒图片
+		for(var i = 5 ; i >= 0 ; i--){
+			$("<li style='background:url(images/img"+i+".png) no-repeat;background-size: contain;'></li>").appendTo("div ul");
+		}
+		// 设置初始显示
+		$("ul li:gt(3)").addClass("cur");
+
+		// 信号量
+		var idx = 0;
+		// li最后一个的下标号
+		var a = $("ul li").length;
+		// lis
+		var $lis = $("ul li");
+		// 打开
+		$(".right_btn").click(function(){
+			// 验收
+			if(idx > 4) return;
+			if($lis.is(":animated")) return;
+			idx++;
+			if(idx == 1){
+				$lis.eq(a-idx).stop(true,).animate({"top":400,"opacity":0},600);
+				$(".left_btn").removeClass("cur");
+			}else{
+				$lis.eq(a-idx-1).stop(true,).animate({"opacity":1},600);
+				$lis.eq(a-idx).stop(true,).animate({
+					"width":1.5*$lis.eq(a-idx).width(),
+					"height":1.5*$lis.eq(a-idx).height(),
+					"top":-(0.5*$lis.eq(a-idx).height())/2,
+					"left":-(0.5*$lis.eq(a-idx).width())/2,
+					"opacity":0},600);
+			}
+			if(idx == 5) 
+				$(".right_btn").addClass("cur");
+			console.log(idx)
+		});
+		// 收起
+		$(".left_btn").click(function(){
+			// 验收
+			if(idx < 1) return;
+			if($lis.is(":animated")) return;
+			
+			if(idx == 1){
+				$lis.eq(a-idx).stop(true,).animate({"top":0,"opacity":1},600,function(){idx--;});
+			}else{
+				$lis.eq(a-idx-1).stop(true,).animate({"opacity":0},600);
+				$lis.eq(a-idx).stop(true,).animate({
+					"width":2/3*$lis.eq(a-idx).width(),
+					"height":2/3*$lis.eq(a-idx).height(),
+					"top":0,
+					"left":0,
+					"opacity":1},600,function(){idx--;});
+			}
+			if(idx == 1){
+				$(".left_btn").addClass("cur");}
+			if(idx == 4) $(".right_btn").removeClass("cur");
+			console.log(idx)
+		});
+	</script>
+</body>
+</html>

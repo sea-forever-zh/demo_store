@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>坚果手机-概览</title>
+	<link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+	<ul></ul>
+	<div></div>
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script>
+		// 添加图片
+		for(var i = 0 ; i < 7 ; i++){
+			$("<li><img src='images/img.png' style='background: url(images/img"+i+".png) no-repeat;background-size: contain;'></img></li>").appendTo("ul");
+		}
+		var arr_start = [61.95,47.8,67.69,47.8,27.92,50.67,61.95];
+		var h = 5.17656;//img的高/100
+		// 初始化
+		for(var i = 0 ; i < 7 ; i++){
+			$("img").eq(i).css("top",h*arr_start[i]);
+		};
+		// 动画初始化
+		function ani_first(){
+			for(var i = 0 ; i < 7 ; i++){
+				$("img").eq(i).stop(true).animate({"top":h*arr_start[i]},360);
+			};
+		}
+		
+		// 图中心到鼠标的距离
+		var jl;
+		// 一个li的占宽
+		var w_li = ($("li").width() + $("ul").width() * .0024285714285715 * 2);
+		// 变化的水平参考距离
+		var w_base = w_li * 5;
+		// ul的padding_left
+		var w_ulPL = $("body").width() * 0.005;
+		// 变化的top值
+		var top_change;
+		// 最高图片的top参考点
+		var top_zuigao = 34.084541664;
+		// 最低图片的top参考点
+		var top_zuidi = 346.34240570399993;
+		// 变化的top参考距离
+		var top_base = 312.25786403999996;//parseFloat(window.getComputedStyle(document.getElementsByTagName("img")[0]).getPropertyValue("height")) * (0.669059-0.065844)
+		// 移入
+		$("div").mousemove(function(event){
+			$("ul li").each(function(index){
+				// 求每个图中心到鼠标的距离
+				jl = event.clientX > (w_ulPL + w_li / 2 + w_li * index) ? event.clientX - (w_ulPL + w_li / 2 + w_li * index) : (w_ulPL + w_li / 2 + w_li * index) - event.clientX;
+				// top值的情况
+				top_change = (jl == 0 ? top_zuigao : (jl / w_base * top_base + top_zuigao));
+				// 判断
+				if(jl > w_base){
+					$("img").eq(index).stop(true,true).animate({"top" : top_zuidi});
+				}else{
+					$("img").eq(index).stop(true,true).animate({"top" : top_change});
+				}
+			});
+		});
+		// 移出
+		$("div").mouseout(function(event){
+			ani_first();
+		});
+	</script>
+</body>
+</html>

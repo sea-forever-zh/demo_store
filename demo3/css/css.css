@@ -1,0 +1,60 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	width: 100%;
+	height: 100%;
+}
+div.di{
+	background: #eaeaea url(../images/bg2.jpg) no-repeat 50%;
+	background-size: auto 100%;
+	position: absolute;
+	z-index: 0;
+	width: 100%;
+	height: auto;
+	opacity: 0;
+}
+div{
+	position: relative;
+	height: 100%;
+	width: 1220px;
+	margin: 0 auto;
+}
+div ul{
+	width: 54vh;
+	height: 87vh;
+	margin: 0 auto;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	list-style: none;
+}
+div ul li{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	overflow: hidden;
+}
+div ul li.cur{
+	opacity: 1;
+}
+div a{
+	width: 48px;
+	height: 48px;
+	position: absolute;
+	top: 52%;
+}
+div a.left_btn{
+	left: 0;
+	background: url(../images/left_btn.png) no-repeat;
+}
+div a.right_btn{
+	right: 0;
+	background: url(../images/right_btn.png) no-repeat;
+}
+div a.cur{
+	display: none;
+}
