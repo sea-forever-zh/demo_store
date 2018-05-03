@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>放大镜</title>
+	<style>
+		nav{
+			width: 176px;
+			margin: 36px auto;
+		}
+		section{
+			width: 800px;
+			height: 400px;
+			margin: 36px auto;
+		}
+		.unit{
+			width: 360px;
+			float: left;
+			margin-right: 20px;
+			position: relative;
+			background: pink;
+		}
+		img{
+			width: 360px;
+			height: 360px;
+			cursor: crosshair;
+			display: block;
+		}
+		.big{
+			width: 176px;
+			height: 176px;
+			pointer-events: none;
+			border: 3px solid rgba(255,255,255,1);
+			border-radius: 50%;
+			position: absolute;
+			box-shadow: 0px 4px 10px 0px rgb(0, 0, 0);
+			background: url(images/a1.png) no-repeat , rgb(255, 255, 255);
+			background-size: 360px 360px;
+			display: none;
+			z-index: 1;
+			/*transition: all 0.1s linear 0s;*/
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<input type="button" value="1倍" data-fd="1" />
+		<input type="button" value="2倍" data-fd="2" />
+		<input type="button" value="3倍" data-fd="3" />
+	</nav>
+	<section>
+		<div class="unit">
+			<img src="images/a1.png" alt="" />
+			<div class="big"></div>
+		</div>
+		<div class="unit">
+			<img src="images/a2.png" alt="" />
+			<div class="big"></div>
+		</div>
+	</section>
+
+
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script>
+		$(".big").eq(1).css({"background" : "url(images/a2.png) no-repeat , rgb(255, 255, 255)","background-size": "360px 360px"});
+
+		// 点击按钮放大尺寸
+		var bei = 1;
+		$("input").click(function(){
+			bei = $(this).data("fd");
+			$(".big").css("background-size" , "" + 360 * bei + "px " + 360 * bei + "px");
+		});
+
+		$("section").delegate("img","mousemove",function(event){
+			$(".big").show();
+			$(".big").css({
+				"top" : event.offsetY - $(".big").height() / 2 - 3,
+				"left" : event.offsetX - $(".big").width() / 2 - 3,
+				"background-position" :  "" + (-event.offsetX * bei + $(".big").width() / 2) + "px " + (-event.offsetY * bei + $(".big").height() / 2) + "px"
+			});
+		});
+
+		$("img").mouseleave(function(){
+			$(".big").hide();
+		});
+	</script>
+</body>
+</html>
